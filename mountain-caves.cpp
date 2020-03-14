@@ -14,7 +14,7 @@ int main(){
     float viewSpeed = 100.0f; // speed of view duh
     float dt = 0.f; // For changing of the time
     sf::Clock dtClock;
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Terrain", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1080, 720), "Terrain", sf::Style::Close);
     sf::View view;
 
     // Initialize elements for cursor selection
@@ -47,6 +47,7 @@ int main(){
         for(int y = 0; y < height; y++){
             tileMap[x][y].setSize(sf::Vector2f(gridSizeF,gridSizeF));
             tileMap[x][y].setPosition(x * gridSizeF, y * gridSizeF);
+            tileMap[x][y].setFillColor(sf::Color::Transparent);
         }
     }
 
