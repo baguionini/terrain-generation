@@ -82,3 +82,4 @@ int main(){
         window.display();
     }
 }
+//g++ mountain-caves.cpp -o t -lsfml-graphics -lsfml-window -lsfml-system

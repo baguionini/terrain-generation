@@ -92,3 +92,4 @@ int main(){
         window.display();
     }
 }
+//g++ mountain.cpp -o t -lsfml-graphics -lsfml-window -lsfml-system
