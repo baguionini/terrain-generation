@@ -8,21 +8,20 @@
 #include "noise.h"
 
 int main(){
-    float gridSizeF = 5.0f; // Gridsize of the map
+    float gridSizeF = 10.0f; // Gridsize of the map
     unsigned gridSizeU = static_cast<unsigned>(gridSizeF);
-    float viewSpeed = 200.0f; // speed of view
+    float viewSpeed = 500.0f; // speed of view
     float dt = 0.f; // For changing of the time
     sf::Clock dtClock;
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Terrain", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1000, 1000), "Terrain", sf::Style::Close);
     sf::View view;
 
-    view.setSize(1920.0f,1080.0f);
-    view.setCenter(window.getSize().x/2.f,window.getSize().y/2.f);
+    sf::RectangleShape player(sf::Vector2f(gridSizeF*2.0f,gridSizeF*2.0f));
+    player.setFillColor(sf::Color::Blue);
 
     // Size of terrain
-    const int height = 500;
-    const int width = 500;
-    double scale = 10.0f;
+    const int height = 100;
+    const int width = 100;
 
     std::vector<std::vector<sf::RectangleShape> > tileMap;
     tileMap.resize(width, std::vector<sf::RectangleShape>());
@@ -36,14 +35,16 @@ int main(){
         }
     }
     // Color grids
-        for(int x = 0; x < width; x++){
+    int octave2D = 2; // 1 - 8 I think
+    double zoom = 5.0f, point = 3.0f, scale = 2.0f;
+
+    for(int x = 0; x < width; x++){
         for(int y = 0; y < height; y++){
-            
-            int color = (int)(noise2d(x,y/scale,2,5,3, scale));
+            int color = (int)(noise2d(x,y,octave2D,zoom,point,scale));
             if(color > 120)
-                tileMap[x][y].setFillColor(sf::Color::Blue);
+                tileMap[x][y].setFillColor(sf::Color::Black);
             else
-                tileMap[x][y].setFillColor(sf::Color::Green);
+                tileMap[x][y].setFillColor(sf::Color::White);
         }
     }
     
@@ -62,13 +63,13 @@ int main(){
             }
             // Move the view
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                view.move(-viewSpeed*dt, 0.f);
+                player.move(-viewSpeed*dt, 0.f);
             else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                view.move(viewSpeed*dt, 0.f);
+                player.move(viewSpeed*dt, 0.f);
             else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-                view.move(0.f,-viewSpeed*dt);
+                player.move(0.f,-viewSpeed*dt);
             else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-                view.move(0.f,viewSpeed*dt);
+                player.move(0.f,viewSpeed*dt);
         }
 
         window.clear();
@@ -79,6 +80,8 @@ int main(){
             for(int y = 0; y < height; y++)
                 window.draw(tileMap[x][y]);
         }
+
+        window.draw(player);
 
         window.setView(window.getDefaultView());
         window.display();

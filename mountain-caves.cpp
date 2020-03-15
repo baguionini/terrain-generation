@@ -11,12 +11,15 @@ int main(){
     srand(time(0));
     float gridSizeF = 20.0f; // Gridsize of the map
     unsigned gridSizeU = static_cast<unsigned>(gridSizeF);
-    float viewSpeed = 100.0f; // speed of view duh
+    float viewSpeed = 500.0f; // speed of view duh
     float dt = 0.f; // For changing of the time
     sf::Clock dtClock;
     sf::RenderWindow window(sf::VideoMode(1920, 1028), "Terrain", sf::Style::Close);
     sf::View view;
 
+    sf::RectangleShape player(sf::Vector2f(gridSizeF,gridSizeF*3.0f));
+    player.setFillColor(sf::Color::Red);
+    player.setPosition(window.getSize().x/2.f,window.getSize().y);
     // Initialize elements for cursor selection
     sf::Vector2i mouseScreen;
     sf::Vector2i mouseWindow;
@@ -25,9 +28,13 @@ int main(){
 
     // Initialize click elements
     sf::Vector2i clickPos;
+    
+    // Size of terrain
+    const int height = 200;
+    const int width = 400;
 
     // Sets window size
-    view.setSize(1920.0f,1080.0f);
+    view.setSize(1500.0f,1080.0f);
     view.setCenter(window.getSize().x/2.f,window.getSize().y);
 
     // Object that selects a grid
@@ -36,9 +43,7 @@ int main(){
     cursor.setOutlineThickness(1.0f);
     cursor.setOutlineColor(sf::Color::Red);
 
-    // Size of terrain
-    const int height = 200;
-    const int width = 400;
+
 
     
     std::vector<std::vector<sf::RectangleShape> > tileMap;
@@ -73,7 +78,7 @@ int main(){
 
     for(int x = 0; x < width; x++){
         int y = (fperlinNoise1D[x]* (float)relativeHeight/altitude + (float)relativeHeight/altitude);
-        printf("%d ", y); // This print how high the mountain will be for each column
+        //printf("%d ", y); // This print how high the mountain will be for each column
             tileMap[x][y].setFillColor(sf::Color::Green);
 
         for(int f = relativeHeight; f > y; f--)
@@ -108,7 +113,7 @@ int main(){
             mouseGrid.x = mouseView.x / gridSizeU;
         if(mouseView.y >= 0.f)
             mouseGrid.y = mouseView.y / gridSizeU;
-        std::cout << "Grid Position, x: " << mouseGrid.x << " y: " << mouseGrid.y << std::endl;
+        //std::cout << "Grid Position, x: " << mouseGrid.x << " y: " << mouseGrid.y << std::endl;
 
         // Cursor
         // Snaps cursor to a grid
@@ -124,6 +129,16 @@ int main(){
                 default:
                     break;
             } 
+
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                player.move(-viewSpeed*dt, 0.f);
+            else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                player.move(viewSpeed*dt, 0.f);
+            else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+                player.move(0.f,-viewSpeed*dt);
+            else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+                player.move(0.f,viewSpeed*dt);
+            
             // Move the view
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                 view.move(-viewSpeed*dt, 0.f);
@@ -189,7 +204,8 @@ int main(){
                 window.draw(tileMap[x][y]);
         }
 
-        window.draw(cursor);
+        window.draw(cursor);    
+        window.draw(player);
 
         window.setView(window.getDefaultView());
         window.display();
