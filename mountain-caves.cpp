@@ -81,13 +81,13 @@ int main(){
     }
 
     // Values you can edit to generate cave systems
-    int octave = 2;// 1 - 8 I think
-    float zoom = 5.0f, point = 3.0f;
+    int octave2D = 2;// 1 - 8 I think
+    double zoom = 5.0f, point = 3.0f, scale = 1.0f;
 
     // Initialize Caves
     for(int x = 0; x < width; x++){
         for(int y = relativeHeight; y < height; y++){
-            int color = (int)(noise2d(x,y,2,5,3));
+            int color = (int)(noise2d(x,y,octave2D,zoom,point,scale));
             if(color > 120)
                 tileMap[x][y].setFillColor(sf::Color::Blue);
             else

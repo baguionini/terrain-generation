@@ -8,7 +8,7 @@
 #include "noise.h"
 
 int main(){
-    float gridSizeF = 10.0f; // Gridsize of the map
+    float gridSizeF = 5.0f; // Gridsize of the map
     unsigned gridSizeU = static_cast<unsigned>(gridSizeF);
     float viewSpeed = 200.0f; // speed of view duh
     float dt = 0.f; // For changing of the time
@@ -20,8 +20,9 @@ int main(){
     view.setCenter(window.getSize().x/2.f,window.getSize().y/2.f);
 
     // Size of terrain
-    const int height = 100;
+    const int height = 500;
     const int width = 500;
+    double scale = 10.0f;
 
     std::vector<std::vector<sf::RectangleShape> > tileMap;
     tileMap.resize(width, std::vector<sf::RectangleShape>());
@@ -37,7 +38,8 @@ int main(){
     // Color grids
         for(int x = 0; x < width; x++){
         for(int y = 0; y < height; y++){
-            int color = (int)(noise2d(x,y,2,5,3));
+            
+            int color = (int)(noise2d(x,y/scale,2,5,3, scale));
             if(color > 120)
                 tileMap[x][y].setFillColor(sf::Color::Blue);
             else
@@ -82,4 +84,4 @@ int main(){
         window.display();
     }
 }
-//g++ mountain-caves.cpp -o t -lsfml-graphics -lsfml-window -lsfml-system
+//g++ topdown.cpp -o t -lsfml-graphics -lsfml-window -lsfml-system

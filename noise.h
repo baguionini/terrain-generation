@@ -31,12 +31,12 @@ double noise(double x,double y)
  return interpolate(int1,int2,y-floory);
 }
 
-double noise2d(int x, int y, int octaves, double zoom, double p){
+double noise2d(int x, int y, int octaves, double zoom, double p, double scale){
     double getnoise =0;
     for(int a=0; a<octaves-1; a++){
     double frequency = pow(2,a);
     double amplitude = pow(p,a);
-    getnoise += noise(((double)x)*frequency/zoom,((double)y)/zoom*frequency)*amplitude;
+    getnoise += noise(((double)x/scale)*frequency/zoom,((double)y/scale)/zoom*frequency)*amplitude;
     }
     return ((getnoise*128.0)+128.0);
 }
