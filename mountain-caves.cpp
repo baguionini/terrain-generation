@@ -64,7 +64,7 @@ int main(){
     // These 3 values you can edit to create different terrains
     int octave1D = 7; // 1 - 7, oddly
     float bias = 1.50f;
-    float altitude = 6.0f; 
+    float altitude = 4.0f; 
 
 
     for(int i = 0; i < width; i++)fnoiseSeed1D[i] = (float)rand()/(float)RAND_MAX;
@@ -95,7 +95,7 @@ int main(){
         }
     }
 
-
+    int color = 0;
     while (window.isOpen()){
         dt = dtClock.restart().asSeconds();
 
@@ -123,7 +123,7 @@ int main(){
                     break;
                 default:
                     break;
-            }
+            } 
             // Move the view
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                 view.move(-viewSpeed*dt, 0.f);
@@ -134,9 +134,49 @@ int main(){
             else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
                 view.move(0.f,viewSpeed*dt);
             
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+                color += 1;
+            
+            if(color > 2)
+                color = 0;
             // Click the tile
+
+            switch(color){
+                case 0:
+                    cursor.setOutlineColor(sf::Color::Red);
+                    break;
+                case 1:
+                    cursor.setOutlineColor(sf::Color::Blue);
+                    break;
+                case 2:
+                    cursor.setOutlineColor(sf::Color::Yellow);
+                    break;
+                default:
+                    break;
+            }
+
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-                tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::Red);
+                if(tileMap[mouseGrid.x][mouseGrid.y].getFillColor() == sf::Color::White){
+                    switch(color){
+                        case 0:
+                            tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::Red);
+                            cursor.setOutlineColor(sf::Color::Red);
+                            break;
+                        case 1:
+                        tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::Blue);
+                        cursor.setOutlineColor(sf::Color::Blue);
+                            break;
+                        case 2:
+                            tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::Yellow);
+                            cursor.setOutlineColor(sf::Color::Yellow);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+                tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::White);
+
 
         }
 
