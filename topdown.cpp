@@ -10,7 +10,7 @@
 int main(){
     float gridSizeF = 5.0f; // Gridsize of the map
     unsigned gridSizeU = static_cast<unsigned>(gridSizeF);
-    float viewSpeed = 200.0f; // speed of view duh
+    float viewSpeed = 200.0f; // speed of view
     float dt = 0.f; // For changing of the time
     sf::Clock dtClock;
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Terrain", sf::Style::Close);
