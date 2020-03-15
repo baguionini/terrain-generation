@@ -23,6 +23,9 @@ int main(){
     sf::Vector2f mouseView;
     sf::Vector2u mouseGrid;
 
+    // Initialize click elements
+    sf::Vector2i clickPos;
+
     // Sets window size
     view.setSize(1920.0f,1080.0f);
     view.setCenter(window.getSize().x/2.f,window.getSize().y);
@@ -60,8 +63,8 @@ int main(){
 
     // These 3 values you can edit to create different terrains
     int octave1D = 7; // 1 - 7, oddly
-    float bias = 1.30f;
-    float altitude = 4.0f; 
+    float bias = 1.50f;
+    float altitude = 6.0f; 
 
 
     for(int i = 0; i < width; i++)fnoiseSeed1D[i] = (float)rand()/(float)RAND_MAX;
@@ -71,7 +74,9 @@ int main(){
     for(int x = 0; x < width; x++){
         int y = (fperlinNoise1D[x]* (float)relativeHeight/altitude + (float)relativeHeight/altitude);
         printf("%d ", y); // This print how high the mountain will be for each column
-        for(int f = relativeHeight; f >= y; f--)
+            tileMap[x][y].setFillColor(sf::Color::Green);
+
+        for(int f = relativeHeight; f > y; f--)
             tileMap[x][f].setFillColor(sf::Color::Black);
     }
 
@@ -103,6 +108,7 @@ int main(){
             mouseGrid.x = mouseView.x / gridSizeU;
         if(mouseView.y >= 0.f)
             mouseGrid.y = mouseView.y / gridSizeU;
+        std::cout << "Grid Position, x: " << mouseGrid.x << " y: " << mouseGrid.y << std::endl;
 
         // Cursor
         // Snaps cursor to a grid
@@ -127,6 +133,11 @@ int main(){
                 view.move(0.f,-viewSpeed*dt);
             else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
                 view.move(0.f,viewSpeed*dt);
+            
+            // Click the tile
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::Red);
+
         }
 
         window.clear();
